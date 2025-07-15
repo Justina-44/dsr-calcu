@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>DSR 债务偿还比率计算器</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", "微软雅黑", sans-serif;
+      background: linear-gradient(to bottom right, #eef2f7, #dbe9f4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      max-width: 420px;
+      width: 100%;
+    }
+
+    .header {
+      background: linear-gradient(to right, #4a90e2, #8e44ad);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 0.95em;
+      color: #333;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .note {
+      font-size: 0.9em;
+      color: #777;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .emoji {
+      font-size: 1.4em;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">📊 债务偿还比率（DSR）计算器</div>
+
+    <div class="input-group">
+      <label for="repayment">每月还款总额（RM）</label>
+      <input type="number" id="repayment" placeholder="例如：2500">
+    </div>
+
+    <div class="input-group">
+      <label for="income">每月总收入（RM）</label>
+      <input type="number" id="income" placeholder="例如：6000">
+    </div>
+
+    <button onclick="calculateDSR()">计算 DSR</button>
+
+    <div class="result" id="result"></div>
+    <div class="note">* DSR = 每月还款 ÷ 每月收入</div>
+  </div>
+
+  <script>
+    function calculateDSR() {
+      const repayment = parseFloat(document.getElementById('repayment').value);
+      const income = parseFloat(document.getElementById('income').value);
+      const result = document.getElementById('result');
+
+      if (isNaN(repayment) || isNaN(income) || income <= 0) {
+        result.innerHTML = `<span class="emoji">⚠️</span>请输入有效的 RM 金额`;
+        result.style.color = "red";
+        return;
+      }
+
+      const dsr = repayment / income;
+      const percent = (dsr * 100).toFixed(2);
+      let message = "";
+
+      if (dsr >= 0.7) {
+        message = `<span class="emoji">❌</span>您的 DSR 为 <strong>${percent}%</strong><br>风险高，基本很难获批`;
+      } else if (dsr >= 0.65) {
+        message = `<span class="emoji">⚠️</span>您的 DSR 为 <strong>${percent}%</strong><br>偏高，部分银行可能拒贷`;
+      } else if (dsr >= 0.4) {
+        message = `<span class="emoji">✅</span>您的 DSR 为 <strong>${percent}%</strong><br>恭喜！处于安全范围`;
+      } else {
+        message = `<span class="emoji">ℹ️</span>您的 DSR 为 <strong>${percent}%</strong><br>很低，说明债务压力小`;
+      }
+
+      result.innerHTML = message;
+      result.style.color = "#2c3e50";
+    }
+  </script>
+
+</body>
+</html>
